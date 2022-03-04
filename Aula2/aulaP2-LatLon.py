@@ -23,3 +23,14 @@ INVÁLIDOS
 (+90, +180.2)
 (+90, +180.00000000000000)
 """
+
+coordenadas = r'\([+\-]?[1-9]?\d(\.\d+)?, [+\-]?(1[0-8]\d[1-9]?\d)(\.\d+)?\)'
+# r'\((\x|-)?'
+
+p = re.compile(coordenadas)
+
+for linha in sys.stdin:
+    if p.match(linha):
+        print("VÁLIDO")
+    else:
+        print("INVÁLIDO")
