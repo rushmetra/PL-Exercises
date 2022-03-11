@@ -2,20 +2,16 @@
 import ply.lex as lex
 
 tokens = ["PA", "PF"]
-# Variável para contabilizar parentesis
-af = 0
 
 def t_PA(t):
     r'\('
-    global af
-    af += 1
+    t.lexer.af += 1
     return t
 
 def t_PF(t):
     r'\)'
-    global af
-    af -= 1
-    if af < 0:
+    t.lexer.af -= 1
+    if t.lexer.af < 0:
         print("ERRO: parentesis a fechar sem ter aberto!")
     return t
 
@@ -28,11 +24,13 @@ def t_error(t):
 
 # analisador léxico 
 lexer = lex.lex()
+# Definição do estado
+lexer.af = 0
 
 import sys 
 
 for line in sys.stdin:
-    af = 0
+    lexer.af = 0
     lexer.input(line)
     for tok in lexer:
         print(tok)
