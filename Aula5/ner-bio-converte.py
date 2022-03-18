@@ -1,4 +1,4 @@
-# Tokenizer para a máquina de calcular 
+# Tokenizer para converter pra estrutura que o professor pediu, foi um dos trabalhos práticos do ano passado
 import ply.lex as lex
 import sys
 import re

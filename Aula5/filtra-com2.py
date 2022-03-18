@@ -1,4 +1,4 @@
-# Tokenizer para a máquina de calcular 
+# Tokenizer para a fiiltrar comentários de html e imprimir o html sem eles
 import ply.lex as lex
 import sys
 
