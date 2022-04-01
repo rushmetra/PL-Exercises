@@ -21,11 +21,9 @@ def t_B(t):
     t.lexer.buffer = partes[1]
     t.lexer.begin('Feature')
 
-
 def t_O(t):
     r'O.+'
     pass
-
 
 def t_Feature_O(t):
     r'O.+'
@@ -52,7 +50,6 @@ def t_Feature_B(t):
     partes = re.split(r'\s+', conteudo)
     t.lexer.tipo = partes[0]
     t.lexer.buffer = partes[1]
-
 
 # Build the lexer
 lexer = lex.lex()
