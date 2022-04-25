@@ -1,9 +1,0 @@
-Somador on/off:
-
-Crie um programa que analisa um texto e:
-1. Sempre que apanhar um inteiro soma-o;
-2. Sempre que apanhar a palavra "off", para de somar; (EM QUALQUER COMBINAÇÃO DE MAIUSCULAS OU MINUSULAS)
-3. Sempre que apanhar a palavra "on", volta a somar; (EM QUALQUER COMBINAÇÃO DE MAIUSCULAS OU MINUSULAS)
-4. Sempre que apanhar "=" imprime o valor da soma no stdout;
-5. Quando chegar ao fim do ficheiro imprime o valor da soma.
-
