@@ -1,0 +1,29 @@
+7
+Ola
+Ola e uma palavra que designa saudaçao
+Os espanhois também se cumprimentam usando Ola
+Em espanhol Ola também designa onda do mar
+Ola a todos
+E todos respondem Ola 
+Este é apenas um ficheiro de teste
+
+---------------------- Enunciado da aula 2 ------------
+Se apanhar "Ola" no inicio da linha: escreve "1"
+^Ola  --> em python -> r'^Ola'
+Se apanhar "Ola" no fim da linha: escreve "2"
+Ola$                          r'Ola$'
+Se apanhar uma linha contendo apenas "Ola": escreve "0"
+^Ola$                    r'^Ola$'
+Nos outros casos, escreve "-1"
+
+
+Função match ou search 
+--------------------- Output esperado:----------------
+0
+1
+2
+-1
+1
+2
+-1
+-------------------------------------------------------

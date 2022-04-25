@@ -1,0 +1,42 @@
+[
+    {
+        "chaveCit": "RHA2008",
+        "titulo": "Álgebra Documental",
+        "autores": [
+            [
+                "jcr",
+                "José Carlos Ramalho"
+            ],
+            [
+                "prh",
+                "Pedro Rangel Henriques"
+            ],
+            [
+                "jj",
+                "José João Almeida"
+            ]
+        ],
+        "ano": 2008,
+        "local": "Twente - Holanda"
+    },
+    {
+        "chaveCit": "RHA1998",
+        "titulo": "Utilização do email pedagogicamente",
+        "autores": [
+            [
+                "jcr",
+                "José Carlos Ramalho"
+            ],
+            [
+                "prh",
+                "Pedro Rangel Henriques"
+            ],
+            [
+                "jj",
+                "José João Almeida"
+            ]
+        ],
+        "ano": 1999,
+        "local": "Universidade do Minho"
+    }
+]
