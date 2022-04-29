@@ -77,7 +77,50 @@ def p_Else_empty(p):
     "Else : "
 
 def p_Else(p):
-    "Else : "
+    "Else : ELSE CondStatements"
+
+def p_CondStatements_simple(p):
+    "CondStatements : Statement"
+
+def p_CondStatements_compound(p):
+    "CondStatements : '{' Statements '}'"
+
+def p_Cond_long(p):
+    "Cond : Cond OR Cond2"
+
+def p_Cond(p):
+    "Cond : Cond2"
+
+def p_Cond_and(p):
+    "Cond : Cond2 AND Cond3"
+
+def p_Cond2(p):
+    "Cond2 : Cond3"
+
+def p_Cond3_not(p):
+    "Cond3 : NOT ExpRel"
+
+def p_Cond3(p):
+    "Cond3 : ExpRel"
+
+def p_ExpRel_gt(p):
+    "ExpRel : Exp '>' Exp"
+
+def p_ExpRel_lt(p):
+    "ExpRel : Exp '<' Exp"
+
+def p_ExpRel_ge(p):
+    "ExpRel : Exp GE Exp"
+
+def p_ExpRel_le(p):
+    "ExpRel : Exp LE Exp"
+
+def p_ExpRel_eq(p):
+    "ExpRel : Exp EQ Exp"
+
+def p_ExpRel_neq(p):
+    "ExpRel : Exp NEQ Exp"
+
 
 def p_error(p):
     print('Erro sintático: ', p)
