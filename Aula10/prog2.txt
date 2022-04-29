@@ -1,0 +1,10 @@
+# Ler dois inteiros e escrever o maior deles
+int n1, n2
+
+n1 = input("Introduza o primeiro inteiro: ")
+n2 = input("Introduza o segundo inteiro: ")
+
+if(n1 > n2)
+    print("O maior é :", n1)
+else 
+    print("O maior é :", n2)

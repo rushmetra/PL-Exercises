@@ -1,8 +1,14 @@
 from re import T
 import ply.lex as lex
 
+# cat prog-1.txt | python3.9 lp_sin.py
+# cat prog-2.txt | python3.9 lp_sin.py
+
 literals = [',','=','(',')','{','}','<','>']
-tokens = ['INT','STR','INPUT','PRINT','IF','ELSE','OR','AND','NOT','GE','LE','EQ','NEQ','id','str']
+tokens = ['COMMENT','INT','STR','INPUT','PRINT','IF','ELSE','OR','AND','NOT','GE','LE','EQ','NEQ','id','str']
+
+def t_COMMENT(p):
+    r'\#.*'
 
 def t_INT(t):
     r'int'

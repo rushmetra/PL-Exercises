@@ -55,20 +55,41 @@ def p_Declaration(p):
 def p_Declaration_empty(p):
     "Declaration : "
 
-def p_PrintArg_id(p):
-    "PrintArg : id"
-
 def p_PrintArg_str(p):
     "PrintArg : str"
 
 def p_PrintArg_Exp(p):
     "PrintArg : Exp"
 
-def p_Exp_int(p):
-    "Exp : INT '(' Exp ')'"
+def p_Exp_ad(p):
+    "Exp : Exp '+' Term"
 
-def p_Exp_input(p):
-    "Exp : INPUT '(' str ')'"    
+def p_Exp_sub(p):
+    "Exp : Exp '-' Term"
+
+def p_Exp_term(p):
+    "Exp : Term"
+
+def p_Term_mul(p):
+    "Term : Term '*' Factor"
+
+def p_Term_div(p):
+    "Term : Term '/' Factor"
+
+def p_Term_factor(p):
+    "Term : Factor"
+
+def p_Factor_int(p):
+    "Factor : INT '(' Exp ')'"
+
+def p_Factor_int(p):
+    "Factor : INPUT '(' str ')'"   
+
+def p_Factor_id(p):
+    "Factor : id"
+
+def p_Factor_num(p):
+    "Factor : num"
 
 def p_Statement_if(p):
     "Statement : IF '(' Cond ')' CondStatements Else"

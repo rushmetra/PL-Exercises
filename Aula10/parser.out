@@ -1,5 +1,9 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    COMMENT
+
 Grammar
 
 Rule 0     S' -> Program
@@ -21,38 +25,75 @@ Rule 15    PrintArgs -> Exp
 Rule 16    Atrib -> id = Exp
 Rule 17    Declaration -> Type IdList
 Rule 18    Declaration -> <empty>
-Rule 19    PrintArg -> id
+Rule 19    Exp -> id
 Rule 20    PrintArg -> str
 Rule 21    PrintArg -> Exp
 Rule 22    Exp -> INT ( Exp )
 Rule 23    Exp -> INPUT ( str )
+Rule 24    Statement -> IF ( Cond ) CondStatements Else
+Rule 25    Else -> <empty>
+Rule 26    Else -> ELSE CondStatements
+Rule 27    CondStatements -> Statement
+Rule 28    CondStatements -> { Statements }
+Rule 29    Cond -> Cond OR Cond2
+Rule 30    Cond -> Cond2
+Rule 31    Cond -> Cond2 AND Cond3
+Rule 32    Cond2 -> Cond3
+Rule 33    Cond3 -> NOT ExpRel
+Rule 34    Cond3 -> ExpRel
+Rule 35    ExpRel -> Exp > Exp
+Rule 36    ExpRel -> Exp < Exp
+Rule 37    ExpRel -> Exp GE Exp
+Rule 38    ExpRel -> Exp LE Exp
+Rule 39    ExpRel -> Exp EQ Exp
+Rule 40    ExpRel -> Exp NEQ Exp
 
 Terminals, with rules where they appear
 
-(                    : 12 22 23
-)                    : 12 22 23
+(                    : 12 22 23 24
+)                    : 12 22 23 24
 ,                    : 7 13
+<                    : 36
 =                    : 16
+>                    : 35
+AND                  : 31
+COMMENT              : 
+ELSE                 : 26
+EQ                   : 39
+GE                   : 37
+IF                   : 24
 INPUT                : 23
 INT                  : 5 22
+LE                   : 38
+NEQ                  : 40
+NOT                  : 33
+OR                   : 29
 PRINT                : 12
 STR                  : 6
 error                : 
 id                   : 7 8 16 19
 str                  : 20 23
+{                    : 28
+}                    : 28
 
 Nonterminals, with rules where they appear
 
 Atrib                : 11
+Cond                 : 24 29
+Cond2                : 29 30 31
+Cond3                : 31 32
+CondStatements       : 24 26
 Declaration          : 2
 Declarations         : 1 2
-Exp                  : 15 16 21 22
+Else                 : 24
+Exp                  : 15 16 21 22 35 35 36 36 37 37 38 38 39 39 40 40
+ExpRel               : 33 34
 IdList               : 4 7 17
 PrintArg             : 13 14
 PrintArgs            : 12 13
 Program              : 0
-Statement            : 9 10
-Statements           : 1 9
+Statement            : 9 10 27
+Statements           : 1 9 28
 Type                 : 4 17
 
 Parsing method: LALR
@@ -70,6 +111,7 @@ state 0
   ! shift/reduce conflict for INT resolved as shift
   ! shift/reduce conflict for STR resolved as shift
     PRINT           reduce using rule 3 (Declarations -> .)
+    IF              reduce using rule 3 (Declarations -> .)
     id              reduce using rule 3 (Declarations -> .)
     INT             shift and go to state 4
     STR             shift and go to state 5
@@ -97,20 +139,24 @@ state 2
     (17) Declaration -> . Type IdList
     (18) Declaration -> .
     (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
     (16) Atrib -> . id = Exp
     (5) Type -> . INT
     (6) Type -> . STR
 
   ! shift/reduce conflict for PRINT resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
   ! shift/reduce conflict for id resolved as shift
   ! shift/reduce conflict for INT resolved as shift
   ! shift/reduce conflict for STR resolved as shift
     PRINT           shift and go to state 11
-    id              shift and go to state 12
+    IF              shift and go to state 12
+    id              shift and go to state 13
     INT             shift and go to state 4
     STR             shift and go to state 5
 
   ! PRINT           [ reduce using rule 18 (Declaration -> .) ]
+  ! IF              [ reduce using rule 18 (Declaration -> .) ]
   ! id              [ reduce using rule 18 (Declaration -> .) ]
   ! INT             [ reduce using rule 18 (Declaration -> .) ]
   ! STR             [ reduce using rule 18 (Declaration -> .) ]
@@ -127,9 +173,9 @@ state 3
     (7) IdList -> . IdList , id
     (8) IdList -> . id
 
-    id              shift and go to state 14
+    id              shift and go to state 15
 
-    IdList                         shift and go to state 13
+    IdList                         shift and go to state 14
 
 state 4
 
@@ -150,17 +196,20 @@ state 6
     (1) Program -> Declarations Statements .
     (9) Statements -> Statements . Statement
     (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
 
     $end            reduce using rule 1 (Program -> Declarations Statements .)
     PRINT           shift and go to state 11
+    IF              shift and go to state 12
 
-    Statement                      shift and go to state 15
+    Statement                      shift and go to state 16
 
 state 7
 
     (2) Declarations -> Declarations Declaration .
 
     PRINT           reduce using rule 2 (Declarations -> Declarations Declaration .)
+    IF              reduce using rule 2 (Declarations -> Declarations Declaration .)
     id              reduce using rule 2 (Declarations -> Declarations Declaration .)
     INT             reduce using rule 2 (Declarations -> Declarations Declaration .)
     STR             reduce using rule 2 (Declarations -> Declarations Declaration .)
@@ -171,7 +220,9 @@ state 8
     (10) Statements -> Statement .
 
     PRINT           reduce using rule 10 (Statements -> Statement .)
+    IF              reduce using rule 10 (Statements -> Statement .)
     $end            reduce using rule 10 (Statements -> Statement .)
+    }               reduce using rule 10 (Statements -> Statement .)
 
 
 state 9
@@ -179,7 +230,9 @@ state 9
     (11) Statements -> Atrib .
 
     PRINT           reduce using rule 11 (Statements -> Atrib .)
+    IF              reduce using rule 11 (Statements -> Atrib .)
     $end            reduce using rule 11 (Statements -> Atrib .)
+    }               reduce using rule 11 (Statements -> Atrib .)
 
 
 state 10
@@ -188,116 +241,160 @@ state 10
     (7) IdList -> . IdList , id
     (8) IdList -> . id
 
-    id              shift and go to state 14
+    id              shift and go to state 15
 
-    IdList                         shift and go to state 16
+    IdList                         shift and go to state 17
 
 state 11
 
     (12) Statement -> PRINT . ( PrintArgs )
 
-    (               shift and go to state 17
+    (               shift and go to state 18
 
 
 state 12
 
-    (16) Atrib -> id . = Exp
+    (24) Statement -> IF . ( Cond ) CondStatements Else
 
-    =               shift and go to state 18
+    (               shift and go to state 19
 
 
 state 13
+
+    (16) Atrib -> id . = Exp
+
+    =               shift and go to state 20
+
+
+state 14
 
     (4) Declarations -> Type IdList .
     (7) IdList -> IdList . , id
 
     PRINT           reduce using rule 4 (Declarations -> Type IdList .)
+    IF              reduce using rule 4 (Declarations -> Type IdList .)
     id              reduce using rule 4 (Declarations -> Type IdList .)
     INT             reduce using rule 4 (Declarations -> Type IdList .)
     STR             reduce using rule 4 (Declarations -> Type IdList .)
-    ,               shift and go to state 19
+    ,               shift and go to state 21
 
 
-state 14
+state 15
 
     (8) IdList -> id .
 
     ,               reduce using rule 8 (IdList -> id .)
     PRINT           reduce using rule 8 (IdList -> id .)
+    IF              reduce using rule 8 (IdList -> id .)
     id              reduce using rule 8 (IdList -> id .)
     INT             reduce using rule 8 (IdList -> id .)
     STR             reduce using rule 8 (IdList -> id .)
 
 
-state 15
+state 16
 
     (9) Statements -> Statements Statement .
 
     PRINT           reduce using rule 9 (Statements -> Statements Statement .)
+    IF              reduce using rule 9 (Statements -> Statements Statement .)
     $end            reduce using rule 9 (Statements -> Statements Statement .)
+    }               reduce using rule 9 (Statements -> Statements Statement .)
 
 
-state 16
+state 17
 
     (17) Declaration -> Type IdList .
     (7) IdList -> IdList . , id
 
     PRINT           reduce using rule 17 (Declaration -> Type IdList .)
+    IF              reduce using rule 17 (Declaration -> Type IdList .)
     id              reduce using rule 17 (Declaration -> Type IdList .)
     INT             reduce using rule 17 (Declaration -> Type IdList .)
     STR             reduce using rule 17 (Declaration -> Type IdList .)
-    ,               shift and go to state 19
+    ,               shift and go to state 21
 
 
-state 17
+state 18
 
     (12) Statement -> PRINT ( . PrintArgs )
     (13) PrintArgs -> . PrintArgs , PrintArg
     (14) PrintArgs -> . PrintArg
     (15) PrintArgs -> . Exp
-    (19) PrintArg -> . id
     (20) PrintArg -> . str
     (21) PrintArg -> . Exp
+    (19) Exp -> . id
     (22) Exp -> . INT ( Exp )
     (23) Exp -> . INPUT ( str )
 
-    id              shift and go to state 23
-    str             shift and go to state 24
-    INT             shift and go to state 25
-    INPUT           shift and go to state 26
+    str             shift and go to state 25
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
 
-    PrintArgs                      shift and go to state 20
-    PrintArg                       shift and go to state 21
-    Exp                            shift and go to state 22
-
-state 18
-
-    (16) Atrib -> id = . Exp
-    (22) Exp -> . INT ( Exp )
-    (23) Exp -> . INPUT ( str )
-
-    INT             shift and go to state 25
-    INPUT           shift and go to state 26
-
-    Exp                            shift and go to state 27
+    PrintArgs                      shift and go to state 22
+    PrintArg                       shift and go to state 23
+    Exp                            shift and go to state 24
 
 state 19
 
-    (7) IdList -> IdList , . id
+    (24) Statement -> IF ( . Cond ) CondStatements Else
+    (29) Cond -> . Cond OR Cond2
+    (30) Cond -> . Cond2
+    (31) Cond -> . Cond2 AND Cond3
+    (32) Cond2 -> . Cond3
+    (33) Cond3 -> . NOT ExpRel
+    (34) Cond3 -> . ExpRel
+    (35) ExpRel -> . Exp > Exp
+    (36) ExpRel -> . Exp < Exp
+    (37) ExpRel -> . Exp GE Exp
+    (38) ExpRel -> . Exp LE Exp
+    (39) ExpRel -> . Exp EQ Exp
+    (40) ExpRel -> . Exp NEQ Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
 
-    id              shift and go to state 28
+    NOT             shift and go to state 32
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
 
+    Cond                           shift and go to state 29
+    Cond2                          shift and go to state 30
+    Cond3                          shift and go to state 31
+    ExpRel                         shift and go to state 33
+    Exp                            shift and go to state 34
 
 state 20
+
+    (16) Atrib -> id = . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 35
+
+state 21
+
+    (7) IdList -> IdList , . id
+
+    id              shift and go to state 36
+
+
+state 22
 
     (12) Statement -> PRINT ( PrintArgs . )
     (13) PrintArgs -> PrintArgs . , PrintArg
 
-    )               shift and go to state 29
-    ,               shift and go to state 30
+    )               shift and go to state 37
+    ,               shift and go to state 38
 
 
-state 21
+state 23
 
     (14) PrintArgs -> PrintArg .
 
@@ -305,7 +402,7 @@ state 21
     ,               reduce using rule 14 (PrintArgs -> PrintArg .)
 
 
-state 22
+state 24
 
     (15) PrintArgs -> Exp .
     (21) PrintArg -> Exp .
@@ -319,15 +416,7 @@ state 22
   ! ,               [ reduce using rule 21 (PrintArg -> Exp .) ]
 
 
-state 23
-
-    (19) PrintArg -> id .
-
-    )               reduce using rule 19 (PrintArg -> id .)
-    ,               reduce using rule 19 (PrintArg -> id .)
-
-
-state 24
+state 25
 
     (20) PrintArg -> str .
 
@@ -335,83 +424,337 @@ state 24
     ,               reduce using rule 20 (PrintArg -> str .)
 
 
-state 25
-
-    (22) Exp -> INT . ( Exp )
-
-    (               shift and go to state 31
-
-
 state 26
 
-    (23) Exp -> INPUT . ( str )
+    (19) Exp -> id .
 
-    (               shift and go to state 32
+    )               reduce using rule 19 (Exp -> id .)
+    ,               reduce using rule 19 (Exp -> id .)
+    >               reduce using rule 19 (Exp -> id .)
+    <               reduce using rule 19 (Exp -> id .)
+    GE              reduce using rule 19 (Exp -> id .)
+    LE              reduce using rule 19 (Exp -> id .)
+    EQ              reduce using rule 19 (Exp -> id .)
+    NEQ             reduce using rule 19 (Exp -> id .)
+    PRINT           reduce using rule 19 (Exp -> id .)
+    IF              reduce using rule 19 (Exp -> id .)
+    $end            reduce using rule 19 (Exp -> id .)
+    }               reduce using rule 19 (Exp -> id .)
+    AND             reduce using rule 19 (Exp -> id .)
+    OR              reduce using rule 19 (Exp -> id .)
 
 
 state 27
 
-    (16) Atrib -> id = Exp .
+    (22) Exp -> INT . ( Exp )
 
-    PRINT           reduce using rule 16 (Atrib -> id = Exp .)
-    $end            reduce using rule 16 (Atrib -> id = Exp .)
+    (               shift and go to state 39
 
 
 state 28
+
+    (23) Exp -> INPUT . ( str )
+
+    (               shift and go to state 40
+
+
+state 29
+
+    (24) Statement -> IF ( Cond . ) CondStatements Else
+    (29) Cond -> Cond . OR Cond2
+
+    )               shift and go to state 41
+    OR              shift and go to state 42
+
+
+state 30
+
+    (30) Cond -> Cond2 .
+    (31) Cond -> Cond2 . AND Cond3
+
+    )               reduce using rule 30 (Cond -> Cond2 .)
+    OR              reduce using rule 30 (Cond -> Cond2 .)
+    AND             shift and go to state 43
+
+
+state 31
+
+    (32) Cond2 -> Cond3 .
+
+    AND             reduce using rule 32 (Cond2 -> Cond3 .)
+    )               reduce using rule 32 (Cond2 -> Cond3 .)
+    OR              reduce using rule 32 (Cond2 -> Cond3 .)
+
+
+state 32
+
+    (33) Cond3 -> NOT . ExpRel
+    (35) ExpRel -> . Exp > Exp
+    (36) ExpRel -> . Exp < Exp
+    (37) ExpRel -> . Exp GE Exp
+    (38) ExpRel -> . Exp LE Exp
+    (39) ExpRel -> . Exp EQ Exp
+    (40) ExpRel -> . Exp NEQ Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    ExpRel                         shift and go to state 44
+    Exp                            shift and go to state 34
+
+state 33
+
+    (34) Cond3 -> ExpRel .
+
+    AND             reduce using rule 34 (Cond3 -> ExpRel .)
+    )               reduce using rule 34 (Cond3 -> ExpRel .)
+    OR              reduce using rule 34 (Cond3 -> ExpRel .)
+
+
+state 34
+
+    (35) ExpRel -> Exp . > Exp
+    (36) ExpRel -> Exp . < Exp
+    (37) ExpRel -> Exp . GE Exp
+    (38) ExpRel -> Exp . LE Exp
+    (39) ExpRel -> Exp . EQ Exp
+    (40) ExpRel -> Exp . NEQ Exp
+
+    >               shift and go to state 45
+    <               shift and go to state 46
+    GE              shift and go to state 47
+    LE              shift and go to state 48
+    EQ              shift and go to state 49
+    NEQ             shift and go to state 50
+
+
+state 35
+
+    (16) Atrib -> id = Exp .
+
+    PRINT           reduce using rule 16 (Atrib -> id = Exp .)
+    IF              reduce using rule 16 (Atrib -> id = Exp .)
+    $end            reduce using rule 16 (Atrib -> id = Exp .)
+    }               reduce using rule 16 (Atrib -> id = Exp .)
+
+
+state 36
 
     (7) IdList -> IdList , id .
 
     ,               reduce using rule 7 (IdList -> IdList , id .)
     PRINT           reduce using rule 7 (IdList -> IdList , id .)
+    IF              reduce using rule 7 (IdList -> IdList , id .)
     id              reduce using rule 7 (IdList -> IdList , id .)
     INT             reduce using rule 7 (IdList -> IdList , id .)
     STR             reduce using rule 7 (IdList -> IdList , id .)
 
 
-state 29
+state 37
 
     (12) Statement -> PRINT ( PrintArgs ) .
 
     PRINT           reduce using rule 12 (Statement -> PRINT ( PrintArgs ) .)
+    IF              reduce using rule 12 (Statement -> PRINT ( PrintArgs ) .)
     $end            reduce using rule 12 (Statement -> PRINT ( PrintArgs ) .)
+    ELSE            reduce using rule 12 (Statement -> PRINT ( PrintArgs ) .)
+    }               reduce using rule 12 (Statement -> PRINT ( PrintArgs ) .)
 
 
-state 30
+state 38
 
     (13) PrintArgs -> PrintArgs , . PrintArg
-    (19) PrintArg -> . id
     (20) PrintArg -> . str
     (21) PrintArg -> . Exp
+    (19) Exp -> . id
     (22) Exp -> . INT ( Exp )
     (23) Exp -> . INPUT ( str )
 
-    id              shift and go to state 23
-    str             shift and go to state 24
-    INT             shift and go to state 25
-    INPUT           shift and go to state 26
+    str             shift and go to state 25
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
 
-    PrintArg                       shift and go to state 33
-    Exp                            shift and go to state 34
+    PrintArg                       shift and go to state 51
+    Exp                            shift and go to state 52
 
-state 31
+state 39
 
     (22) Exp -> INT ( . Exp )
+    (19) Exp -> . id
     (22) Exp -> . INT ( Exp )
     (23) Exp -> . INPUT ( str )
 
-    INT             shift and go to state 25
-    INPUT           shift and go to state 26
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
 
-    Exp                            shift and go to state 35
+    Exp                            shift and go to state 53
 
-state 32
+state 40
 
     (23) Exp -> INPUT ( . str )
 
-    str             shift and go to state 36
+    str             shift and go to state 54
 
 
-state 33
+state 41
+
+    (24) Statement -> IF ( Cond ) . CondStatements Else
+    (27) CondStatements -> . Statement
+    (28) CondStatements -> . { Statements }
+    (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
+
+    {               shift and go to state 57
+    PRINT           shift and go to state 11
+    IF              shift and go to state 12
+
+    CondStatements                 shift and go to state 55
+    Statement                      shift and go to state 56
+
+state 42
+
+    (29) Cond -> Cond OR . Cond2
+    (32) Cond2 -> . Cond3
+    (33) Cond3 -> . NOT ExpRel
+    (34) Cond3 -> . ExpRel
+    (35) ExpRel -> . Exp > Exp
+    (36) ExpRel -> . Exp < Exp
+    (37) ExpRel -> . Exp GE Exp
+    (38) ExpRel -> . Exp LE Exp
+    (39) ExpRel -> . Exp EQ Exp
+    (40) ExpRel -> . Exp NEQ Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    NOT             shift and go to state 32
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Cond2                          shift and go to state 58
+    Cond3                          shift and go to state 31
+    ExpRel                         shift and go to state 33
+    Exp                            shift and go to state 34
+
+state 43
+
+    (31) Cond -> Cond2 AND . Cond3
+    (33) Cond3 -> . NOT ExpRel
+    (34) Cond3 -> . ExpRel
+    (35) ExpRel -> . Exp > Exp
+    (36) ExpRel -> . Exp < Exp
+    (37) ExpRel -> . Exp GE Exp
+    (38) ExpRel -> . Exp LE Exp
+    (39) ExpRel -> . Exp EQ Exp
+    (40) ExpRel -> . Exp NEQ Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    NOT             shift and go to state 32
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Cond3                          shift and go to state 59
+    ExpRel                         shift and go to state 33
+    Exp                            shift and go to state 34
+
+state 44
+
+    (33) Cond3 -> NOT ExpRel .
+
+    AND             reduce using rule 33 (Cond3 -> NOT ExpRel .)
+    )               reduce using rule 33 (Cond3 -> NOT ExpRel .)
+    OR              reduce using rule 33 (Cond3 -> NOT ExpRel .)
+
+
+state 45
+
+    (35) ExpRel -> Exp > . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 60
+
+state 46
+
+    (36) ExpRel -> Exp < . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 61
+
+state 47
+
+    (37) ExpRel -> Exp GE . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 62
+
+state 48
+
+    (38) ExpRel -> Exp LE . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 63
+
+state 49
+
+    (39) ExpRel -> Exp EQ . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 64
+
+state 50
+
+    (40) ExpRel -> Exp NEQ . Exp
+    (19) Exp -> . id
+    (22) Exp -> . INT ( Exp )
+    (23) Exp -> . INPUT ( str )
+
+    id              shift and go to state 26
+    INT             shift and go to state 27
+    INPUT           shift and go to state 28
+
+    Exp                            shift and go to state 65
+
+state 51
 
     (13) PrintArgs -> PrintArgs , PrintArg .
 
@@ -419,7 +762,7 @@ state 33
     ,               reduce using rule 13 (PrintArgs -> PrintArgs , PrintArg .)
 
 
-state 34
+state 52
 
     (21) PrintArg -> Exp .
 
@@ -427,38 +770,235 @@ state 34
     ,               reduce using rule 21 (PrintArg -> Exp .)
 
 
-state 35
+state 53
 
     (22) Exp -> INT ( Exp . )
 
-    )               shift and go to state 37
+    )               shift and go to state 66
 
 
-state 36
+state 54
 
     (23) Exp -> INPUT ( str . )
 
-    )               shift and go to state 38
+    )               shift and go to state 67
 
 
-state 37
+state 55
+
+    (24) Statement -> IF ( Cond ) CondStatements . Else
+    (25) Else -> .
+    (26) Else -> . ELSE CondStatements
+
+  ! shift/reduce conflict for ELSE resolved as shift
+    PRINT           reduce using rule 25 (Else -> .)
+    IF              reduce using rule 25 (Else -> .)
+    $end            reduce using rule 25 (Else -> .)
+    }               reduce using rule 25 (Else -> .)
+    ELSE            shift and go to state 69
+
+  ! ELSE            [ reduce using rule 25 (Else -> .) ]
+
+    Else                           shift and go to state 68
+
+state 56
+
+    (27) CondStatements -> Statement .
+
+    ELSE            reduce using rule 27 (CondStatements -> Statement .)
+    PRINT           reduce using rule 27 (CondStatements -> Statement .)
+    IF              reduce using rule 27 (CondStatements -> Statement .)
+    $end            reduce using rule 27 (CondStatements -> Statement .)
+    }               reduce using rule 27 (CondStatements -> Statement .)
+
+
+state 57
+
+    (28) CondStatements -> { . Statements }
+    (9) Statements -> . Statements Statement
+    (10) Statements -> . Statement
+    (11) Statements -> . Atrib
+    (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
+    (16) Atrib -> . id = Exp
+
+    PRINT           shift and go to state 11
+    IF              shift and go to state 12
+    id              shift and go to state 13
+
+    Statements                     shift and go to state 70
+    Statement                      shift and go to state 8
+    Atrib                          shift and go to state 9
+
+state 58
+
+    (29) Cond -> Cond OR Cond2 .
+
+    )               reduce using rule 29 (Cond -> Cond OR Cond2 .)
+    OR              reduce using rule 29 (Cond -> Cond OR Cond2 .)
+
+
+state 59
+
+    (31) Cond -> Cond2 AND Cond3 .
+
+    )               reduce using rule 31 (Cond -> Cond2 AND Cond3 .)
+    OR              reduce using rule 31 (Cond -> Cond2 AND Cond3 .)
+
+
+state 60
+
+    (35) ExpRel -> Exp > Exp .
+
+    AND             reduce using rule 35 (ExpRel -> Exp > Exp .)
+    )               reduce using rule 35 (ExpRel -> Exp > Exp .)
+    OR              reduce using rule 35 (ExpRel -> Exp > Exp .)
+
+
+state 61
+
+    (36) ExpRel -> Exp < Exp .
+
+    AND             reduce using rule 36 (ExpRel -> Exp < Exp .)
+    )               reduce using rule 36 (ExpRel -> Exp < Exp .)
+    OR              reduce using rule 36 (ExpRel -> Exp < Exp .)
+
+
+state 62
+
+    (37) ExpRel -> Exp GE Exp .
+
+    AND             reduce using rule 37 (ExpRel -> Exp GE Exp .)
+    )               reduce using rule 37 (ExpRel -> Exp GE Exp .)
+    OR              reduce using rule 37 (ExpRel -> Exp GE Exp .)
+
+
+state 63
+
+    (38) ExpRel -> Exp LE Exp .
+
+    AND             reduce using rule 38 (ExpRel -> Exp LE Exp .)
+    )               reduce using rule 38 (ExpRel -> Exp LE Exp .)
+    OR              reduce using rule 38 (ExpRel -> Exp LE Exp .)
+
+
+state 64
+
+    (39) ExpRel -> Exp EQ Exp .
+
+    AND             reduce using rule 39 (ExpRel -> Exp EQ Exp .)
+    )               reduce using rule 39 (ExpRel -> Exp EQ Exp .)
+    OR              reduce using rule 39 (ExpRel -> Exp EQ Exp .)
+
+
+state 65
+
+    (40) ExpRel -> Exp NEQ Exp .
+
+    AND             reduce using rule 40 (ExpRel -> Exp NEQ Exp .)
+    )               reduce using rule 40 (ExpRel -> Exp NEQ Exp .)
+    OR              reduce using rule 40 (ExpRel -> Exp NEQ Exp .)
+
+
+state 66
 
     (22) Exp -> INT ( Exp ) .
 
     )               reduce using rule 22 (Exp -> INT ( Exp ) .)
     ,               reduce using rule 22 (Exp -> INT ( Exp ) .)
+    >               reduce using rule 22 (Exp -> INT ( Exp ) .)
+    <               reduce using rule 22 (Exp -> INT ( Exp ) .)
+    GE              reduce using rule 22 (Exp -> INT ( Exp ) .)
+    LE              reduce using rule 22 (Exp -> INT ( Exp ) .)
+    EQ              reduce using rule 22 (Exp -> INT ( Exp ) .)
+    NEQ             reduce using rule 22 (Exp -> INT ( Exp ) .)
     PRINT           reduce using rule 22 (Exp -> INT ( Exp ) .)
+    IF              reduce using rule 22 (Exp -> INT ( Exp ) .)
     $end            reduce using rule 22 (Exp -> INT ( Exp ) .)
+    }               reduce using rule 22 (Exp -> INT ( Exp ) .)
+    AND             reduce using rule 22 (Exp -> INT ( Exp ) .)
+    OR              reduce using rule 22 (Exp -> INT ( Exp ) .)
 
 
-state 38
+state 67
 
     (23) Exp -> INPUT ( str ) .
 
     )               reduce using rule 23 (Exp -> INPUT ( str ) .)
     ,               reduce using rule 23 (Exp -> INPUT ( str ) .)
+    >               reduce using rule 23 (Exp -> INPUT ( str ) .)
+    <               reduce using rule 23 (Exp -> INPUT ( str ) .)
+    GE              reduce using rule 23 (Exp -> INPUT ( str ) .)
+    LE              reduce using rule 23 (Exp -> INPUT ( str ) .)
+    EQ              reduce using rule 23 (Exp -> INPUT ( str ) .)
+    NEQ             reduce using rule 23 (Exp -> INPUT ( str ) .)
     PRINT           reduce using rule 23 (Exp -> INPUT ( str ) .)
+    IF              reduce using rule 23 (Exp -> INPUT ( str ) .)
     $end            reduce using rule 23 (Exp -> INPUT ( str ) .)
+    }               reduce using rule 23 (Exp -> INPUT ( str ) .)
+    AND             reduce using rule 23 (Exp -> INPUT ( str ) .)
+    OR              reduce using rule 23 (Exp -> INPUT ( str ) .)
+
+
+state 68
+
+    (24) Statement -> IF ( Cond ) CondStatements Else .
+
+    PRINT           reduce using rule 24 (Statement -> IF ( Cond ) CondStatements Else .)
+    IF              reduce using rule 24 (Statement -> IF ( Cond ) CondStatements Else .)
+    $end            reduce using rule 24 (Statement -> IF ( Cond ) CondStatements Else .)
+    ELSE            reduce using rule 24 (Statement -> IF ( Cond ) CondStatements Else .)
+    }               reduce using rule 24 (Statement -> IF ( Cond ) CondStatements Else .)
+
+
+state 69
+
+    (26) Else -> ELSE . CondStatements
+    (27) CondStatements -> . Statement
+    (28) CondStatements -> . { Statements }
+    (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
+
+    {               shift and go to state 57
+    PRINT           shift and go to state 11
+    IF              shift and go to state 12
+
+    CondStatements                 shift and go to state 71
+    Statement                      shift and go to state 56
+
+state 70
+
+    (28) CondStatements -> { Statements . }
+    (9) Statements -> Statements . Statement
+    (12) Statement -> . PRINT ( PrintArgs )
+    (24) Statement -> . IF ( Cond ) CondStatements Else
+
+    }               shift and go to state 72
+    PRINT           shift and go to state 11
+    IF              shift and go to state 12
+
+    Statement                      shift and go to state 16
+
+state 71
+
+    (26) Else -> ELSE CondStatements .
+
+    ELSE            reduce using rule 26 (Else -> ELSE CondStatements .)
+    PRINT           reduce using rule 26 (Else -> ELSE CondStatements .)
+    IF              reduce using rule 26 (Else -> ELSE CondStatements .)
+    $end            reduce using rule 26 (Else -> ELSE CondStatements .)
+    }               reduce using rule 26 (Else -> ELSE CondStatements .)
+
+
+state 72
+
+    (28) CondStatements -> { Statements } .
+
+    ELSE            reduce using rule 28 (CondStatements -> { Statements } .)
+    PRINT           reduce using rule 28 (CondStatements -> { Statements } .)
+    IF              reduce using rule 28 (CondStatements -> { Statements } .)
+    $end            reduce using rule 28 (CondStatements -> { Statements } .)
+    }               reduce using rule 28 (CondStatements -> { Statements } .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -466,8 +1006,10 @@ WARNING:
 WARNING: shift/reduce conflict for INT in state 0 resolved as shift
 WARNING: shift/reduce conflict for STR in state 0 resolved as shift
 WARNING: shift/reduce conflict for PRINT in state 2 resolved as shift
+WARNING: shift/reduce conflict for IF in state 2 resolved as shift
 WARNING: shift/reduce conflict for id in state 2 resolved as shift
 WARNING: shift/reduce conflict for INT in state 2 resolved as shift
 WARNING: shift/reduce conflict for STR in state 2 resolved as shift
-WARNING: reduce/reduce conflict in state 22 resolved using rule (PrintArgs -> Exp)
-WARNING: rejected rule (PrintArg -> Exp) in state 22
+WARNING: shift/reduce conflict for ELSE in state 55 resolved as shift
+WARNING: reduce/reduce conflict in state 24 resolved using rule (PrintArgs -> Exp)
+WARNING: rejected rule (PrintArg -> Exp) in state 24
